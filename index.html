@@ -1,0 +1,1692 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Automation Systems Overview</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+      }
+
+      .presentation-container {
+        max-width: 1200px;
+        width: 100%;
+        background: white;
+        border-radius: 30px;
+        box-shadow: 0 35px 70px rgba(0, 0, 0, 0.25);
+        overflow: hidden;
+        position: relative;
+      }
+
+      /* Main Menu Styles */
+      .main-menu {
+        display: block;
+        padding: 60px 50px;
+        min-height: 750px;
+        text-align: center;
+      }
+
+      .main-menu.hidden {
+        display: none;
+      }
+
+      .main-menu h1 {
+        font-size: 3.5rem;
+        color: #1a202c;
+        margin-bottom: 20px;
+        font-weight: 800;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      .main-menu .subtitle {
+        font-size: 1.4rem;
+        color: #4a5568;
+        margin-bottom: 60px;
+        font-weight: 500;
+      }
+
+      .automations-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 30px;
+        margin: 50px 0;
+      }
+
+      .automation-card {
+        background: white;
+        border: 3px solid #e2e8f0;
+        padding: 35px;
+        border-radius: 25px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-align: left;
+      }
+
+      .automation-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+      }
+
+      .automation-card.inv-parser {
+        border-color: #4facfe;
+      }
+
+      .automation-card.inv-parser:hover {
+        border-color: #3182ce;
+        box-shadow: 0 20px 40px rgba(79, 172, 254, 0.3);
+      }
+
+      .automation-card.po-mailer {
+        border-color: #2dd4bf;
+      }
+
+      .automation-card.po-mailer:hover {
+        border-color: #0891b2;
+        box-shadow: 0 20px 40px rgba(45, 212, 191, 0.3);
+      }
+
+      .automation-card.kickoff {
+        border-color: #10b981;
+      }
+
+      .automation-card.kickoff:hover {
+        border-color: #059669;
+        box-shadow: 0 20px 40px rgba(16, 185, 129, 0.3);
+      }
+
+      .automation-card.fourth {
+        border-color: #f59e0b;
+      }
+
+      .automation-card.fourth:hover {
+        border-color: #d97706;
+        box-shadow: 0 20px 40px rgba(245, 158, 11, 0.3);
+      }
+
+      .automation-card .emoji {
+        font-size: 3rem;
+        margin-bottom: 20px;
+        display: block;
+      }
+
+      .automation-card h3 {
+        font-size: 1.8rem;
+        margin-bottom: 15px;
+        font-weight: 700;
+        color: #1a202c;
+      }
+
+      .automation-card p {
+        font-size: 1.1rem;
+        color: #4a5568;
+        line-height: 1.6;
+        margin-bottom: 20px;
+      }
+
+      .automation-card .status {
+        display: inline-block;
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: white;
+      }
+
+      .automation-card.inv-parser .status {
+        background: #4facfe;
+      }
+
+      .automation-card.po-mailer .status {
+        background: #2dd4bf;
+      }
+
+      .automation-card.kickoff .status {
+        background: #10b981;
+      }
+
+      .automation-card.fourth .status {
+        background: #f59e0b;
+      }
+
+      /* Automation Section Styles */
+      .automation-section {
+        display: none;
+      }
+
+      .automation-section.active {
+        display: block;
+      }
+
+      .slide {
+        display: none;
+        padding: 80px 50px 120px 50px;
+        min-height: 750px;
+        text-align: center;
+        position: relative;
+      }
+
+      .slide.active {
+        display: block;
+      }
+
+      /* Header Styles */
+      .section-header {
+        position: absolute;
+        top: 20px;
+        left: 50px;
+        right: 50px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        z-index: 10;
+      }
+
+      .back-btn {
+        background: #6b7280;
+        color: white;
+        border: none;
+        padding: 12px 20px;
+        border-radius: 25px;
+        cursor: pointer;
+        font-size: 1rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+      }
+
+      .back-btn:hover {
+        background: #4b5563;
+        transform: translateY(-2px);
+      }
+
+      .section-title {
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: #1a202c;
+      }
+
+      /* Common Slide Styles */
+      .slide h1 {
+        font-size: 3.2rem;
+        margin-bottom: 30px;
+        font-weight: 800;
+        color: #1a202c;
+      }
+
+      .slide h2 {
+        font-size: 2.4rem;
+        color: #2d3748;
+        margin-bottom: 40px;
+        font-weight: 700;
+      }
+
+      .slide h3 {
+        font-size: 1.8rem;
+        margin-bottom: 35px;
+        font-weight: 600;
+        color: #4a5568;
+      }
+
+      /* Purpose Section */
+      .purpose-section {
+        padding: 40px;
+        border-radius: 25px;
+        margin: 40px 0;
+        text-align: left;
+        color: white;
+      }
+
+      .purpose-section h4 {
+        font-size: 1.6rem;
+        margin-bottom: 20px;
+        font-weight: 700;
+      }
+
+      .purpose-item {
+        display: flex;
+        align-items: center;
+        margin: 15px 0;
+        font-size: 1.2rem;
+        font-weight: 500;
+      }
+
+      .purpose-item .emoji {
+        font-size: 1.8rem;
+        margin-right: 15px;
+      }
+
+      .make-info {
+        background: #f8fafc;
+        border: 3px solid;
+        border-radius: 20px;
+        padding: 25px;
+        margin: 30px 0;
+        text-align: left;
+      }
+
+      .make-info h5 {
+        font-size: 1.3rem;
+        margin-bottom: 15px;
+        font-weight: 700;
+        color: #2d3748;
+      }
+
+      .make-info ul {
+        list-style: none;
+        padding: 0;
+      }
+
+      .make-info li {
+        margin: 10px 0;
+        font-size: 1.1rem;
+        color: #4a5568;
+        font-weight: 600;
+      }
+
+      /* Flow Container */
+      .flow-container {
+        background: #f8fafc;
+        border-radius: 25px;
+        padding: 40px;
+        margin: 40px 0;
+        text-align: left;
+      }
+
+      .flow-step {
+        display: flex;
+        align-items: center;
+        background: white;
+        margin: 20px 0;
+        padding: 25px;
+        border-radius: 20px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+      }
+
+      .flow-step:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+      }
+
+      .step-number {
+        color: white;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.4rem;
+        font-weight: bold;
+        margin-right: 25px;
+        flex-shrink: 0;
+      }
+
+      .step-content {
+        flex: 1;
+      }
+
+      .step-content h5 {
+        color: #2d3748;
+        font-size: 1.3rem;
+        margin-bottom: 8px;
+        font-weight: 700;
+      }
+
+      .step-content p {
+        color: #4a5568;
+        font-size: 1rem;
+        line-height: 1.5;
+      }
+
+      /* Input/Output Sections */
+      .input-section,
+      .output-section {
+        background: #f0f8ff;
+        border-radius: 25px;
+        padding: 40px;
+        margin: 40px 0;
+        text-align: left;
+      }
+
+      .input-section h4,
+      .output-section h4 {
+        font-size: 1.8rem;
+        margin-bottom: 25px;
+        font-weight: 700;
+        color: #1a202c;
+        text-align: center;
+      }
+
+      .condition-item {
+        display: flex;
+        align-items: center;
+        margin: 15px 0;
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: #2d3748;
+      }
+
+      .condition-item .emoji {
+        font-size: 1.8rem;
+        margin-right: 15px;
+      }
+
+      /* Error Section */
+      .error-section {
+        background: #fef2f2;
+        border: 3px solid #f87171;
+        border-radius: 25px;
+        padding: 40px;
+        margin: 40px 0;
+      }
+
+      .error-section h4 {
+        color: #991b1b;
+        font-size: 1.8rem;
+        margin-bottom: 25px;
+        font-weight: 700;
+        text-align: center;
+      }
+
+      .error-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 20px;
+        margin-top: 25px;
+      }
+
+      .error-item {
+        background: white;
+        padding: 20px;
+        border-radius: 15px;
+        text-align: center;
+        border-left: 5px solid #f87171;
+      }
+
+      .error-item .emoji {
+        font-size: 2rem;
+        margin-bottom: 10px;
+        display: block;
+      }
+
+      .error-item p {
+        color: #991b1b;
+        font-size: 1rem;
+        font-weight: 600;
+      }
+
+      /* Color Themes */
+      .inv-parser .slide h1 {
+        background: linear-gradient(135deg, #4facfe, #3182ce);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      .inv-parser .purpose-section {
+        background: linear-gradient(135deg, #4facfe, #3182ce);
+      }
+
+      .inv-parser .make-info {
+        border-color: #4facfe;
+      }
+
+      .inv-parser .step-number {
+        background: linear-gradient(135deg, #4facfe, #3182ce);
+      }
+
+      .inv-parser .nav-btn {
+        background: linear-gradient(135deg, #4facfe, #3182ce);
+      }
+
+      .po-mailer .slide h1 {
+        background: linear-gradient(135deg, #2dd4bf, #0891b2);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      .po-mailer .purpose-section {
+        background: linear-gradient(135deg, #2dd4bf, #0891b2);
+      }
+
+      .po-mailer .make-info {
+        border-color: #2dd4bf;
+      }
+
+      .po-mailer .step-number {
+        background: linear-gradient(135deg, #2dd4bf, #0891b2);
+      }
+
+      .po-mailer .nav-btn {
+        background: linear-gradient(135deg, #2dd4bf, #0891b2);
+      }
+
+      .kickoff .slide h1 {
+        background: linear-gradient(135deg, #10b981, #059669);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      .kickoff .purpose-section {
+        background: linear-gradient(135deg, #10b981, #059669);
+      }
+
+      .kickoff .make-info {
+        border-color: #10b981;
+      }
+
+      .kickoff .step-number {
+        background: linear-gradient(135deg, #10b981, #059669);
+      }
+
+      .kickoff .nav-btn {
+        background: linear-gradient(135deg, #10b981, #059669);
+      }
+
+      .fourth .slide h1 {
+        background: linear-gradient(135deg, #f59e0b, #d97706);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      .fourth .purpose-section {
+        background: linear-gradient(135deg, #f59e0b, #d97706);
+      }
+
+      .fourth .make-info {
+        border-color: #f59e0b;
+      }
+
+      .fourth .step-number {
+        background: linear-gradient(135deg, #f59e0b, #d97706);
+      }
+
+      .fourth .nav-btn {
+        background: linear-gradient(135deg, #f59e0b, #d97706);
+      }
+
+      /* Navigation */
+      .navigation {
+        position: absolute;
+        bottom: 35px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        gap: 30px;
+        align-items: center;
+      }
+
+      .nav-btn {
+        color: white;
+        border: none;
+        padding: 18px 35px;
+        border-radius: 40px;
+        cursor: pointer;
+        font-size: 1.2rem;
+        font-weight: 700;
+        transition: all 0.3s ease;
+        box-shadow: 0 6px 25px rgba(0, 0, 0, 0.3);
+      }
+
+      .nav-btn:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+      }
+
+      .nav-btn:disabled {
+        background: #cbd5e0 !important;
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+      }
+
+      .slide-counter {
+        background: #e2e8f0;
+        color: #4a5568;
+        padding: 15px 30px;
+        border-radius: 35px;
+        font-size: 1.2rem;
+        font-weight: 700;
+      }
+
+      @media (max-width: 768px) {
+        .automations-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .slide {
+          padding: 60px 25px 100px 25px;
+          min-height: 650px;
+        }
+
+        .section-header {
+          left: 25px;
+          right: 25px;
+        }
+
+        .main-menu h1 {
+          font-size: 2.8rem;
+        }
+
+        .error-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="presentation-container">
+      <!-- Main Menu -->
+      <div class="main-menu" id="mainMenu">
+        <h1>🤖 Automation Systems</h1>
+        <p class="subtitle">
+          Comprehensive Overview of All Automated Workflows
+        </p>
+
+        <div class="automations-grid">
+          <div
+            class="automation-card inv-parser"
+            onclick="showAutomation('inv-parser')"
+          >
+            <span class="emoji">🎯</span>
+            <h3>INV-PARSER</h3>
+            <p>
+              Automates extraction of sales invoice details from PDF files and
+              sends the data to SmartSheet. No more manual data entry!
+            </p>
+            <span class="status">Active</span>
+          </div>
+
+          <div
+            class="automation-card po-mailer"
+            onclick="showAutomation('po-mailer')"
+          >
+            <span class="emoji">📤</span>
+            <h3>PO-Mailer v2</h3>
+            <p>
+              Sends Purchase Orders (POs) to Vendors Automatically. Gets PO info
+              + PDF from SmartSheet and emails vendors.
+            </p>
+            <span class="status">Active</span>
+          </div>
+
+          <div
+            class="automation-card kickoff"
+            onclick="showAutomation('kickoff')"
+          >
+            <span class="emoji">📌</span>
+            <h3>Kick-off Mailer</h3>
+            <p>
+              Automatically notifies the Project Manager to schedule a kick-off
+              meeting with Construction Document Review Form.
+            </p>
+            <span class="status">Active</span>
+          </div>
+
+          <div
+            class="automation-card fourth"
+            onclick="showAutomation('fourth')"
+          >
+            <span class="emoji">🔍</span>
+            <h3>PSCE/SSCE-Parser</h3>
+            <p>
+              Automatically extracts quote details from PDF files (Sales or
+              Purchasing) and updates SmartSheet with clean, structured data.
+            </p>
+            <span class="status">Active</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- INV-PARSER Section -->
+      <div class="automation-section inv-parser" id="inv-parserSection">
+        <div class="section-header">
+          <button class="back-btn" onclick="showMainMenu()">
+            ← Back to Menu
+          </button>
+          <div class="section-title">INV-PARSER Automation</div>
+        </div>
+
+        <!-- Slide 1: Purpose -->
+        <div class="slide active">
+          <h1>🎯 INV-PARSER</h1>
+
+          <div class="purpose-section">
+            <h4>🔍 Purpose:</h4>
+            <div class="purpose-item">
+              <span class="emoji">📄</span>
+              <span
+                >Automates extraction of sales invoice details from PDF files
+                and sends the data to SmartSheet.</span
+              >
+            </div>
+
+            <h4 style="margin-top: 30px">📉 Benefit:</h4>
+            <div class="purpose-item">
+              <span class="emoji">⚡</span>
+              <span
+                >No more manual data entry = faster, error-free invoicing
+                process.</span
+              >
+            </div>
+          </div>
+
+          <div class="make-info">
+            <h5>Automation in Make.com:</h5>
+            <ul>
+              <li>🏷️ INV-Parser: Run</li>
+              <li>📝 INV-Parser: Results Logger</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Slide 2: Executive Summary -->
+        <div class="slide">
+          <h2>🧩 Executive Summary</h2>
+          <h3>Flow Visual</h3>
+
+          <div class="flow-container">
+            <div class="flow-step">
+              <div class="step-number">🔔</div>
+              <div class="step-content">
+                <h5>Slack Event</h5>
+                <p>Channel: #inv-parser-reruns-1734285</p>
+              </div>
+            </div>
+
+            <div class="flow-step">
+              <div class="step-number">🔍</div>
+              <div class="step-content">
+                <h5>Extract SRowID(s)</h5>
+                <p>Parse message for row identifiers</p>
+              </div>
+            </div>
+
+            <div class="flow-step">
+              <div class="step-number">📊</div>
+              <div class="step-content">
+                <h5>Check SmartSheet</h5>
+                <p>Invoice Confirmation Log validation</p>
+              </div>
+            </div>
+
+            <div class="flow-step">
+              <div class="step-number">📎</div>
+              <div class="step-content">
+                <h5>Download PDF</h5>
+                <p>Retrieve invoice file from SmartSheet</p>
+              </div>
+            </div>
+
+            <div class="flow-step">
+              <div class="step-number">🔄</div>
+              <div class="step-content">
+                <h5>Convert PDF to Text</h5>
+                <p>Extract readable content from PDF</p>
+              </div>
+            </div>
+
+            <div class="flow-step">
+              <div class="step-number">🤖</div>
+              <div class="step-content">
+                <h5>Extract Data with ChatGPT</h5>
+                <p>AI-powered data parsing and extraction</p>
+              </div>
+            </div>
+
+            <div class="flow-step">
+              <div class="step-number">📥</div>
+              <div class="step-content">
+                <h5>Update SmartSheet</h5>
+                <p>Row updated with parsed data or error note</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Slide 3: Input Conditions -->
+        <div class="slide">
+          <h2>📥 Input Conditions</h2>
+
+          <div class="input-section">
+            <h4>Trigger:</h4>
+            <div class="condition-item">
+              <span class="emoji">🟢</span>
+              <span>New Slack Message</span>
+            </div>
+
+            <h4 style="margin-top: 30px">Needed Info:</h4>
+            <div class="condition-item">
+              <span class="emoji">🔢</span>
+              <span>SRowID(s) mentioned in Slack</span>
+            </div>
+            <div class="condition-item">
+              <span class="emoji">📊</span>
+              <span>Same SRowID(s) exist in SmartSheet</span>
+            </div>
+            <div class="condition-item">
+              <span class="emoji">📎</span>
+              <span>Row must have a PDF invoice attached</span>
+            </div>
+
+            <div
+              style="
+                text-align: center;
+                margin-top: 30px;
+                font-size: 1.3rem;
+                font-weight: 700;
+                color: #10b981;
+              "
+            >
+              🕒 Runs automatically when triggered
+            </div>
+          </div>
+        </div>
+
+        <!-- Slide 4: Expected Output -->
+        <div class="slide">
+          <h2>📤 Expected Output</h2>
+
+          <div class="output-section">
+            <h4>🎯 Result:</h4>
+            <div class="condition-item">
+              <span class="emoji">📊</span>
+              <span
+                >SmartSheet row is automatically filled with invoice data
+                extracted from PDF</span
+              >
+            </div>
+
+            <div
+              style="
+                text-align: center;
+                margin: 40px 0;
+                font-size: 1.4rem;
+                font-weight: 700;
+                color: #2d3748;
+              "
+            >
+              📎 PDF ➡️ Text ➡️ Parsed ➡️ Row updated
+            </div>
+
+            <div
+              style="
+                text-align: center;
+                font-size: 1.3rem;
+                font-weight: 700;
+                color: #10b981;
+              "
+            >
+              ✅ Fast, accurate, and no human input needed
+            </div>
+          </div>
+        </div>
+
+        <!-- Slide 5: Error Handling -->
+        <div class="slide">
+          <h2>❗ Error Handling</h2>
+
+          <div class="error-section">
+            <h4>🔁 If something goes wrong:</h4>
+
+            <div style="margin: 30px 0">
+              <div class="condition-item">
+                <span class="emoji">⚠️</span>
+                <span>Error is logged automatically</span>
+              </div>
+              <div class="condition-item">
+                <span class="emoji">📊</span>
+                <span>Parsing failure or missing file noted in SmartSheet</span>
+              </div>
+              <div class="condition-item">
+                <span class="emoji">💬</span>
+                <span
+                  >Slack may also receive error notifications depending on
+                  setup</span
+                >
+              </div>
+            </div>
+
+            <h4>Common Errors:</h4>
+            <div class="error-grid">
+              <div class="error-item">
+                <span class="emoji">❌</span>
+                <p>Missing SRowID in SmartSheet</p>
+              </div>
+              <div class="error-item">
+                <span class="emoji">📎</span>
+                <p>No PDF attached</p>
+              </div>
+              <div class="error-item">
+                <span class="emoji">🧾</span>
+                <p>Failed to convert PDF</p>
+              </div>
+              <div class="error-item">
+                <span class="emoji">🤖</span>
+                <p>Parsing failed</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="navigation">
+          <button class="nav-btn" onclick="changeSlide('inv-parser', -1)">
+            ← Previous
+          </button>
+          <div class="slide-counter">
+            <span class="current-slide">1</span> /
+            <span class="total-slides">5</span>
+          </div>
+          <button class="nav-btn" onclick="changeSlide('inv-parser', 1)">
+            Next →
+          </button>
+        </div>
+      </div>
+
+      <!-- PO-Mailer Section -->
+      <div class="automation-section po-mailer" id="po-mailerSection">
+        <div class="section-header">
+          <button class="back-btn" onclick="showMainMenu()">
+            ← Back to Menu
+          </button>
+          <div class="section-title">PO-Mailer v2 Automation</div>
+        </div>
+
+        <!-- Slide 1: Purpose -->
+        <div class="slide active">
+          <h1>📤 PO-Mailer v2</h1>
+
+          <div class="purpose-section">
+            <h4>📤 Sends Purchase Orders (POs) to Vendors Automatically</h4>
+
+            <div class="purpose-item">
+              <span class="emoji">🧾</span>
+              <span>Gets PO info + PDF from SmartSheet</span>
+            </div>
+            <div class="purpose-item">
+              <span class="emoji">📧</span>
+              <span>Sends email to vendor with PO attachment</span>
+            </div>
+            <div class="purpose-item">
+              <span class="emoji">❌</span>
+              <span>No more manual email sending!</span>
+            </div>
+          </div>
+
+          <div class="make-info">
+            <h5>SmartSheet name:</h5>
+            <ul>
+              <li>📊 BES Purchasing Log</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Slide 2: Executive Summary -->
+        <div class="slide">
+          <h2>🧩 Executive Summary</h2>
+          <h3>Flow Visual</h3>
+
+          <div class="flow-container">
+            <div class="flow-step">
+              <div class="step-number">1</div>
+              <div class="step-content">
+                <h5>SmartSheet Check</h5>
+                <p>
+                  Find rows with: PO Status = NEW, Has attachment, PO Issued
+                </p>
+              </div>
+            </div>
+
+            <div class="flow-step">
+              <div class="step-number">2</div>
+              <div class="step-content">
+                <h5>Download PO PDF</h5>
+                <p>Retrieve purchase order document</p>
+              </div>
+            </div>
+
+            <div class="flow-step">
+              <div class="step-number">3</div>
+              <div class="step-content">
+                <h5>Send Email to Vendor</h5>
+                <p>Automated email delivery with PO details</p>
+              </div>
+            </div>
+
+            <div class="flow-step">
+              <div class="step-number">4</div>
+              <div class="step-content">
+                <h5>Update Status to "SENT"</h5>
+                <p>Mark as processed in SmartSheet</p>
+              </div>
+            </div>
+
+            <div class="flow-step">
+              <div class="step-number">5</div>
+              <div class="step-content">
+                <h5>Log Activity to Slack</h5>
+                <p>Channel: #po-mailer-v2</p>
+              </div>
+            </div>
+          </div>
+
+          <div
+            style="
+              text-align: center;
+              margin-top: 30px;
+              font-size: 1.3rem;
+              font-weight: 700;
+              color: #10b981;
+            "
+          >
+            👉 Runs every 30 minutes
+          </div>
+        </div>
+
+        <!-- Slide 3: Input Conditions -->
+        <div class="slide">
+          <h2>📥 Input Conditions</h2>
+
+          <div class="input-section">
+            <h4>Triggers When Row Has:</h4>
+            <div class="condition-item">
+              <span class="emoji">✅</span>
+              <span>PO Mailer Status = NEW</span>
+            </div>
+            <div class="condition-item">
+              <span class="emoji">📎</span>
+              <span>Has PDF Attachment</span>
+            </div>
+            <div class="condition-item">
+              <span class="emoji">🧾</span>
+              <span>PO Status = PO Issued</span>
+            </div>
+
+            <div
+              style="
+                text-align: center;
+                margin-top: 30px;
+                font-size: 1.3rem;
+                font-weight: 700;
+                color: #10b981;
+              "
+            >
+              🕒 Runs every 30 minutes automatically
+            </div>
+          </div>
+        </div>
+
+        <!-- Slide 4: Expected Output -->
+        <div class="slide">
+          <h2>📤 Expected Output</h2>
+
+          <div class="output-section">
+            <h4>📧 Vendor receives email with:</h4>
+            <div class="condition-item">
+              <span class="emoji">📝</span>
+              <span>Purchase Details</span>
+            </div>
+            <div class="condition-item">
+              <span class="emoji">📎</span>
+              <span>Attached PDF PO</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Slide 5: Error Handling -->
+        <div class="slide">
+          <h2>⚠️ Error Handling</h2>
+
+          <div class="error-section">
+            <h4>If any errors occur during the process, the automation:</h4>
+
+            <div style="margin: 30px 0">
+              <div class="condition-item">
+                <span class="emoji">💬</span>
+                <span
+                  >Sends a message to the #po-mailer-v2 Slack channel with
+                  details</span
+                >
+              </div>
+              <div class="condition-item">
+                <span class="emoji">📊</span>
+                <span
+                  >Sets the PO Mailer Status to "ERROR" in the SmartSheet
+                  log</span
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="navigation">
+          <button class="nav-btn" onclick="changeSlide('po-mailer', -1)">
+            ← Previous
+          </button>
+          <div class="slide-counter">
+            <span class="current-slide">1</span> /
+            <span class="total-slides">5</span>
+          </div>
+          <button class="nav-btn" onclick="changeSlide('po-mailer', 1)">
+            Next →
+          </button>
+        </div>
+      </div>
+
+      <!-- Kick-off Mailer Section -->
+      <div class="automation-section kickoff" id="kickoffSection">
+        <div class="section-header">
+          <button class="back-btn" onclick="showMainMenu()">
+            ← Back to Menu
+          </button>
+          <div class="section-title">Kick-off Mailer Automation</div>
+        </div>
+
+        <!-- Slide 1: Purpose -->
+        <div class="slide active">
+          <h1>📌 Kick-off Mailer</h1>
+
+          <div class="purpose-section">
+            <div class="purpose-item">
+              <span class="emoji">📌</span>
+              <span
+                >Automatically notifies the Project Manager to schedule a
+                kick-off meeting</span
+              >
+            </div>
+            <div class="purpose-item">
+              <span class="emoji">📎</span>
+              <span
+                >Includes the Construction Document Review Form as a PDF</span
+              >
+            </div>
+          </div>
+
+          <div class="make-info">
+            <h5>SmartSheet Source:</h5>
+            <ul>
+              <li>📄 Kick-off To PM Sheet</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Slide 2: Executive Summary -->
+        <div class="slide">
+          <h2>📌 Executive Summary</h2>
+          <h3>Process Flow</h3>
+
+          <div class="flow-container">
+            <div class="flow-step">
+              <div class="step-number">1</div>
+              <div class="step-content">
+                <h5>Check SmartSheet for rows with:</h5>
+                <p>Status = "NEW" and PDF attached</p>
+              </div>
+            </div>
+
+            <div class="flow-step">
+              <div class="step-number">2</div>
+              <div class="step-content">
+                <h5>Download PDF</h5>
+                <p>Construction Document Review Form</p>
+              </div>
+            </div>
+
+            <div class="flow-step">
+              <div class="step-number">3</div>
+              <div class="step-content">
+                <h5>Send email to PM with PDF attached</h5>
+                <p>Automated notification delivery</p>
+              </div>
+            </div>
+
+            <div class="flow-step">
+              <div class="step-number">4</div>
+              <div class="step-content">
+                <h5>Update Status to "SENT"</h5>
+                <p>Mark as processed in SmartSheet</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Slide 3: Input Requirements -->
+        <div class="slide">
+          <h2>⏱️ Input Requirements</h2>
+
+          <div class="input-section">
+            <h4>Trigger:</h4>
+            <div class="condition-item">
+              <span class="emoji">🟢</span>
+              <span>New message in Slack channel: kick-off-mailer</span>
+            </div>
+
+            <h4 style="margin-top: 30px">Required:</h4>
+            <div class="condition-item">
+              <span class="emoji">🔔</span>
+              <span>Slack Event in kick-off-mailer</span>
+            </div>
+            <div class="condition-item">
+              <span class="emoji">📄</span>
+              <span>SmartSheet row must have:</span>
+            </div>
+            <div style="margin-left: 40px">
+              <div class="condition-item">
+                <span class="emoji">✔️</span>
+                <span>Status = "NEW"</span>
+              </div>
+              <div class="condition-item">
+                <span class="emoji">📎</span>
+                <span>PDF Attachment</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Slide 4: Expected Output -->
+        <div class="slide">
+          <h2>📤 Expected Output</h2>
+
+          <div class="output-section">
+            <div class="condition-item">
+              <span class="emoji">✅</span>
+              <span>Email sent to Project Manager</span>
+            </div>
+
+            <h4 style="margin-top: 30px">📧 Includes:</h4>
+            <div class="condition-item">
+              <span class="emoji">📝</span>
+              <span>Details from SmartSheet</span>
+            </div>
+            <div class="condition-item">
+              <span class="emoji">📎</span>
+              <span>Construction Document Review Form (PDF)</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Slide 5: Error Handling -->
+        <div class="slide">
+          <h2>⚠️ Error Handling</h2>
+
+          <div class="error-section">
+            <div
+              style="
+                text-align: center;
+                margin-bottom: 30px;
+                font-size: 1.3rem;
+                font-weight: 700;
+                color: #991b1b;
+              "
+            >
+              If something goes wrong ➜ Status = "ERROR"
+            </div>
+
+            <h4>Common issues:</h4>
+            <div class="error-grid">
+              <div class="error-item">
+                <span class="emoji">❌</span>
+                <p>Missing fields</p>
+              </div>
+              <div class="error-item">
+                <span class="emoji">📎</span>
+                <p>No attachment</p>
+              </div>
+              <div class="error-item">
+                <span class="emoji">🧾</span>
+                <p>PDF download failed</p>
+              </div>
+              <div class="error-item">
+                <span class="emoji">🤖</span>
+                <p>Email send failed</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="navigation">
+          <button class="nav-btn" onclick="changeSlide('kickoff', -1)">
+            ← Previous
+          </button>
+          <div class="slide-counter">
+            <span class="current-slide">1</span> /
+            <span class="total-slides">5</span>
+          </div>
+          <button class="nav-btn" onclick="changeSlide('kickoff', 1)">
+            Next →
+          </button>
+        </div>
+      </div>
+
+      <!-- Fourth Automation Section -->
+      <div class="automation-section fourth" id="fourthSection">
+        <div class="section-header">
+          <button class="back-btn" onclick="showMainMenu()">
+            ← Back to Menu
+          </button>
+          <div class="section-title">PSCE/SSCE-Parser Automation</div>
+        </div>
+
+        <!-- Slide 1: Purpose -->
+        <div class="slide active">
+          <h1>🔍 PSCE/SSCE-Parser</h1>
+
+          <div class="purpose-section">
+            <h4>🔍 Purpose:</h4>
+            <div class="purpose-item">
+              <span class="emoji">📄</span>
+              <span
+                >Automatically extracts quote details from PDF files (Sales or
+                Purchasing) and updates SmartSheet with clean, structured
+                data.</span
+              >
+            </div>
+          </div>
+        </div>
+
+        <!-- Slide 2: Executive Summary - Scenario 1 -->
+        <div class="slide">
+          <h2>📌 Executive Summary</h2>
+          <h3>🔁 Scenario 1: Sales Estimates</h3>
+
+          <div class="make-info">
+            <h5>Configuration:</h5>
+            <ul>
+              <li>🔔 Trigger: Slack message in #parser-form-submission</li>
+              <li>📊 Source Sheet: PDF Estimates For Sales</li>
+              <li>
+                🎯 Target Sheet: PDF Parse Sub-Contractor Estimates For Sales
+              </li>
+            </ul>
+          </div>
+
+          <div class="flow-container">
+            <div class="flow-step">
+              <div class="step-number">📥</div>
+              <div class="step-content">
+                <h5>New Row (Status = NEW)</h5>
+                <p>Detect new entries in source sheet</p>
+              </div>
+            </div>
+
+            <div class="flow-step">
+              <div class="step-number">📎</div>
+              <div class="step-content">
+                <h5>Download PDF</h5>
+                <p>Retrieve sales estimate document</p>
+              </div>
+            </div>
+
+            <div class="flow-step">
+              <div class="step-number">🤖</div>
+              <div class="step-content">
+                <h5>Extract Data (ChatGPT)</h5>
+                <p>AI-powered data parsing and extraction</p>
+              </div>
+            </div>
+
+            <div class="flow-step">
+              <div class="step-number">📄</div>
+              <div class="step-content">
+                <h5>Add Parent Row</h5>
+                <p>Total Cost, Confidence Score</p>
+              </div>
+            </div>
+
+            <div class="flow-step">
+              <div class="step-number">📎</div>
+              <div class="step-content">
+                <h5>Attach PDF</h5>
+                <p>Store original document</p>
+              </div>
+            </div>
+
+            <div class="flow-step">
+              <div class="step-number">➕</div>
+              <div class="step-content">
+                <h5>Add Child Row</h5>
+                <p>Sales Item Details</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Slide 3: Executive Summary - Scenario 2 -->
+        <div class="slide">
+          <h2>📌 Executive Summary</h2>
+          <h3>🔁 Scenario 2: Purchasing Estimates</h3>
+
+          <div class="make-info">
+            <h5>Configuration:</h5>
+            <ul>
+              <li>🔔 Trigger: Slack message in #parser-form-submission</li>
+              <li>📊 Source Sheet: PDF Estimates For Purchasing</li>
+              <li>🎯 Target Sheet: PDF Parse - Estimates For Purchasing</li>
+            </ul>
+          </div>
+
+          <div class="flow-container">
+            <div class="flow-step">
+              <div class="step-number">📥</div>
+              <div class="step-content">
+                <h5>New Row (Status = NEW)</h5>
+                <p>Detect new entries in source sheet</p>
+              </div>
+            </div>
+
+            <div class="flow-step">
+              <div class="step-number">📎</div>
+              <div class="step-content">
+                <h5>Download PDF</h5>
+                <p>Retrieve purchasing estimate document</p>
+              </div>
+            </div>
+
+            <div class="flow-step">
+              <div class="step-number">🗑️</div>
+              <div class="step-content">
+                <h5>Remove Existing Row</h5>
+                <p>Clean up previous entries if any</p>
+              </div>
+            </div>
+
+            <div class="flow-step">
+              <div class="step-number">🤖</div>
+              <div class="step-content">
+                <h5>Extract Data (ChatGPT)</h5>
+                <p>AI-powered data parsing and extraction</p>
+              </div>
+            </div>
+
+            <div class="flow-step">
+              <div class="step-number">📄</div>
+              <div class="step-content">
+                <h5>Add Parent Row</h5>
+                <p>Total Cost, Confidence Score</p>
+              </div>
+            </div>
+
+            <div class="flow-step">
+              <div class="step-number">📎</div>
+              <div class="step-content">
+                <h5>Attach PDF</h5>
+                <p>Store original document</p>
+              </div>
+            </div>
+
+            <div class="flow-step">
+              <div class="step-number">🧠</div>
+              <div class="step-content">
+                <h5>Standardize Item Name (ChatGPT)</h5>
+                <p>Normalize product/service names</p>
+              </div>
+            </div>
+
+            <div class="flow-step">
+              <div class="step-number">➕</div>
+              <div class="step-content">
+                <h5>Add Child Row</h5>
+                <p>Cleaned Purchase Details</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Slide 4: Input Requirements -->
+        <div class="slide">
+          <h2>⏱️ Input Requirements</h2>
+
+          <div class="input-section">
+            <div class="condition-item">
+              <span class="emoji">🔔</span>
+              <span>Slack Event Trigger</span>
+            </div>
+            <div class="condition-item">
+              <span class="emoji">✅</span>
+              <span>SmartSheet Row with:</span>
+            </div>
+            <div style="margin-left: 40px">
+              <div class="condition-item">
+                <span class="emoji">📊</span>
+                <span>Status = "NEW"</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Slide 5: Expected Output -->
+        <div class="slide">
+          <h2>📤 Expected Output</h2>
+
+          <div class="output-section">
+            <div class="condition-item">
+              <span class="emoji">📊</span>
+              <span>Structured Data in SmartSheet</span>
+            </div>
+            <div class="condition-item">
+              <span class="emoji">📎</span>
+              <span>PDF Stored in New Row</span>
+            </div>
+            <div class="condition-item">
+              <span class="emoji">🧠</span>
+              <span>Normalized Item Names</span>
+            </div>
+            <div class="condition-item">
+              <span class="emoji">🧾</span>
+              <span>Less Manual Entry</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Slide 6: Error Handling -->
+        <div class="slide">
+          <h2>⚠️ Error Handling</h2>
+
+          <div class="error-section">
+            <div
+              style="
+                text-align: center;
+                margin-bottom: 30px;
+                font-size: 1.3rem;
+                font-weight: 700;
+                color: #991b1b;
+              "
+            >
+              All errors are recorded in the BES – Automation Usage Log Table in
+              SmartSheet.
+            </div>
+
+            <h4>Common errors include:</h4>
+            <div class="error-grid">
+              <div class="error-item">
+                <span class="emoji">❌</span>
+                <p>RowID not found</p>
+              </div>
+              <div class="error-item">
+                <span class="emoji">📎</span>
+                <p>Missing PDF attachment</p>
+              </div>
+              <div class="error-item">
+                <span class="emoji">📄</span>
+                <p>PDF couldn't be converted to text</p>
+              </div>
+              <div class="error-item">
+                <span class="emoji">🤖</span>
+                <p>Data extraction failed</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="navigation">
+          <button class="nav-btn" onclick="changeSlide('fourth', -1)">
+            ← Previous
+          </button>
+          <div class="slide-counter">
+            <span class="current-slide">1</span> /
+            <span class="total-slides">6</span>
+          </div>
+          <button class="nav-btn" onclick="changeSlide('fourth', 1)">
+            Next →
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      let currentSlides = {
+        "inv-parser": 0,
+        "po-mailer": 0,
+        kickoff: 0,
+        fourth: 0,
+      };
+
+      const totalSlides = {
+        "inv-parser": 5,
+        "po-mailer": 5,
+        kickoff: 5,
+        fourth: 6,
+      };
+
+      function showMainMenu() {
+        document.getElementById("mainMenu").classList.remove("hidden");
+        document.querySelectorAll(".automation-section").forEach((section) => {
+          section.classList.remove("active");
+        });
+      }
+
+      function showAutomation(automationType) {
+        document.getElementById("mainMenu").classList.add("hidden");
+        document.querySelectorAll(".automation-section").forEach((section) => {
+          section.classList.remove("active");
+        });
+        document
+          .getElementById(automationType + "Section")
+          .classList.add("active");
+
+        // Reset to first slide
+        currentSlides[automationType] = 0;
+        showSlide(automationType, 0);
+      }
+
+      function showSlide(automationType, index) {
+        const section = document.getElementById(automationType + "Section");
+        const slides = section.querySelectorAll(".slide");
+
+        // Hide all slides
+        slides.forEach((slide) => slide.classList.remove("active"));
+
+        // Show current slide
+        slides[index].classList.add("active");
+
+        // Update counter
+        const currentSlideSpan = section.querySelector(".current-slide");
+        const totalSlidesSpan = section.querySelector(".total-slides");
+
+        if (currentSlideSpan) currentSlideSpan.textContent = index + 1;
+        if (totalSlidesSpan)
+          totalSlidesSpan.textContent = totalSlides[automationType];
+
+        // Update navigation buttons
+        const prevBtn = section.querySelector(
+          ".navigation .nav-btn:first-child"
+        );
+        const nextBtn = section.querySelector(
+          ".navigation .nav-btn:last-child"
+        );
+
+        if (prevBtn) prevBtn.disabled = index === 0;
+        if (nextBtn)
+          nextBtn.disabled = index === totalSlides[automationType] - 1;
+      }
+
+      function changeSlide(automationType, direction) {
+        const newIndex = currentSlides[automationType] + direction;
+
+        if (newIndex >= 0 && newIndex < totalSlides[automationType]) {
+          currentSlides[automationType] = newIndex;
+          showSlide(automationType, newIndex);
+        }
+      }
+
+      // Keyboard navigation
+      document.addEventListener("keydown", function (event) {
+        const activeSection = document.querySelector(
+          ".automation-section.active"
+        );
+        if (activeSection) {
+          const automationType = activeSection.id.replace("Section", "");
+
+          if (event.key === "ArrowLeft") {
+            changeSlide(automationType, -1);
+          } else if (event.key === "ArrowRight") {
+            changeSlide(automationType, 1);
+          } else if (event.key === "Escape") {
+            showMainMenu();
+          }
+        }
+      });
+
+      // Initialize
+      showMainMenu();
+    </script>
+    <script>
+      (function () {
+        function c() {
+          var b = a.contentDocument || a.contentWindow.document;
+          if (b) {
+            var d = b.createElement("script");
+            d.innerHTML =
+              "window.__CF$cv$params={r:'968d7bf9c11f8d0b',t:'MTc1NDEzNjc1NC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";
+            b.getElementsByTagName("head")[0].appendChild(d);
+          }
+        }
+        if (document.body) {
+          var a = document.createElement("iframe");
+          a.height = 1;
+          a.width = 1;
+          a.style.position = "absolute";
+          a.style.top = 0;
+          a.style.left = 0;
+          a.style.border = "none";
+          a.style.visibility = "hidden";
+          document.body.appendChild(a);
+          if ("loading" !== document.readyState) c();
+          else if (window.addEventListener)
+            document.addEventListener("DOMContentLoaded", c);
+          else {
+            var e = document.onreadystatechange || function () {};
+            document.onreadystatechange = function (b) {
+              e(b);
+              "loading" !== document.readyState &&
+                ((document.onreadystatechange = e), c());
+            };
+          }
+        }
+      })();
+    </script>
+  </body>
+</html>
